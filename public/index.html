@@ -37,7 +37,7 @@
                         <div class="authorization-by-email__wrapper">
                             <label class="authorization-by-email__password-label" for="password-input">Password:</label>
                             <input class="authorization-by-email__password-input" id="password-input"
-                                name="password-input" type="password" v-model="password">
+                                name="password-input" type="password" v-model="password" required>
                         </div>
                         <!-- Кнопка -->
                         <div class="authorization-by-email__wrapper">
@@ -51,7 +51,7 @@
                         <!-- Телефон -->
                         <div class="authorization-by-tel__wrapper">
                             <label class="authorization-by-tel__tel-label" for="tel-input">Telephone:</label>
-                            <input class="authorization-by-tel__tel-input" id="tel-input" name="tel-input" type="tel" v-model="tel">
+                            <input class="authorization-by-tel__tel-input" id="tel-input" name="tel-input" type="tel" v-model="tel" pattern="[\+]\d{1}\s[\(]\d{3}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}">
                         </div>
                         <!-- Кнопка -->
                         <div class="authorization-by-tel__wrapper">
@@ -141,7 +141,7 @@
                         this.errorMessage.none = false;
                         setTimeout(() => {
                             this.errorMessage.none = true;
-                        }, 1000);
+                        }, 2000);
                     }
 
                     this.email = "";
