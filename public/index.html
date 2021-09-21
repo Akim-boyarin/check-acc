@@ -128,8 +128,9 @@
                     let data = (this.authByEmail) ? { email: this.email, password: this.password, type: "email", task: "logIn" } : { tel: this.tel, type: "tel", task: "logIn" };
                     let dataToServer = JSON.stringify(data);
 
-                    let port = 5000;
-                    let result = await fetch(`https://obscure-savannah-30470.herokuapp.com/${port}/`, {
+                    console.log(dataToServer);
+
+                    let result = await fetch(`https://obscure-savannah-30470.herokuapp.com:5000/`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'

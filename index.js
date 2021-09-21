@@ -3,15 +3,10 @@ const fs = require("fs");
 
 const app = express();
 
-let port = process.env.PORT || 5000;
+let port = /*process.env.PORT || */5000;
 let jsonParser = express.json();
 
 app.use("/", express.static(`${__dirname}/public`));
-
-app.get("/", (request, response) => {
-    console.log("This get is listened");
-    response.send("message");
-});
 
 app.post("/", jsonParser, (request, response) => {
     fs.readFile("./dataForAuthorization.json", "utf-8", (error, desiredData) => {
