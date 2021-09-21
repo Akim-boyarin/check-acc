@@ -130,7 +130,7 @@
 
                     console.log(dataToServer);
 
-                    let result = await fetch(`https://obscure-savannah-30470.herokuapp.com/`, {
+                    let result = await fetch(`http://localhost/`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'
@@ -151,25 +151,6 @@
                     this.password = "";
                     this.tel = "";
                 },
-                async logOut() {
-                    let data = { task: "logOut" };
-                    let dataToServer = JSON.stringify(data);
-                    console.log(dataToServer);
-
-                    let port = process.env.PORT || 5000;
-
-                    let result = fetch(`http://localhost:${port}/`, {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
-                        },
-                        body: dataToServer,
-                    }).then(response => response.json());
-
-                    if (result.value) {
-                        this.isAuthCompleted = false;
-                    }
-                }
             }
         });
     </script>
