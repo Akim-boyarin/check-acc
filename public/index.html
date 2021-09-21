@@ -78,8 +78,6 @@
 
     <!-- Vue.js script -->
     <script type="module">
-        // import { Vue } from "./../node_modules/vue/dist/vue.common.dev.js";
-
         let app = new Vue({
             el: "#app",
             data: {
@@ -128,8 +126,6 @@
                     let data = (this.authByEmail) ? { email: this.email, password: this.password, type: "email", task: "logIn" } : { tel: this.tel, type: "tel", task: "logIn" };
                     let dataToServer = JSON.stringify(data);
 
-                    console.log(dataToServer);
-
                     let result = await fetch(`http://localhost:5000`, {
                         method: "POST",
                         headers: {
@@ -151,6 +147,22 @@
                     this.password = "";
                     this.tel = "";
                 },
+                async logOut() {
+                    let reqBody = JSON.stringify({task: "logOut"});
+                    let result = await fetch(`http://localhost:5000`, {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: reqBody,
+                    }).then(response => response.json());
+
+                    if (result.value) {
+                        this.isAuthCompleted = false;
+                        this.authByEmail = true;
+                        this.emailTab['authorization__tab--clicked'] = true;
+                    }
+                }
             }
         });
     </script>

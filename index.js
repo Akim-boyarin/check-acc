@@ -35,6 +35,17 @@ app.post("/", jsonParser, (request, response) => {
 
         response.json(answer);
     });
+
+    if (request.body.task === "logOut") {
+        fs.readFile("./dataForAuthorization.json", "utf-8", (error, dataFromServer) => {
+            let parcedDataFromServer = JSON.parse(dataFromServer);
+            parcedDataFromServer.isLoggedIn = false;
+
+            fs.writeFile("./dataForAuthorization.json", JSON.stringify(parcedDataFromServer), () => {});
+
+            response.json({ value: true });
+        })
+    }
 });
 
 app.listen(port, () => {
