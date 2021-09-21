@@ -126,7 +126,8 @@
                     let data = (this.authByEmail) ? { email: this.email, password: this.password, type: "email", task: "logIn" } : { tel: this.tel, type: "tel", task: "logIn" };
                     let dataToServer = JSON.stringify(data);
 
-                    let result = await fetch(`http://localhost:5000`, {
+                    // `http://localhost:5000` - на локальной машине
+                    let result = await fetch(`/`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'
@@ -149,7 +150,9 @@
                 },
                 async logOut() {
                     let reqBody = JSON.stringify({task: "logOut"});
-                    let result = await fetch(`http://localhost:5000`, {
+
+                    // `http://localhost:5000` - на локальной машине
+                    let result = await fetch(`/`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'
