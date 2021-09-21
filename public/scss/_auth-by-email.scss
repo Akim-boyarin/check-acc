@@ -1,0 +1,82 @@
+.authorization-by-email {
+    font-size: inherit;
+    height: calc(75em/7);
+    padding: calc(10em/7);
+
+    &__form {
+        width: 100%;
+        height: 100%;
+        @include set-flex(column, space-around, flex-start);
+    }
+
+    &__wrapper {
+        width: 100%;
+        height: calc(10em/7);
+        @include set-flex(row, flex-start, center);
+    }
+
+    &__wrapper:nth-child(2) {
+        margin-bottom: calc(19em/14);
+    }
+
+    &__email-label {
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    &__email-input {
+        @include input-style();
+
+        margin-left: 4.7em;
+        @media (min-width: 375px) {
+            margin-left: 5.7em;
+        }
+        @media (min-width: 400px) {
+            margin-left: 6.2em;
+        }
+        @media (min-width: 465px) {
+            margin-left: 6.8em;
+        }
+        @media (min-width: 540px) {
+            width: 14em;
+            margin-left: 7.2em;
+        }
+    }
+
+    &__password-label {
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    &__password-input {
+        @include input-style();
+
+        margin-left: 1.9em;
+        @media (min-width: 375px) {
+            margin-left: 2.9em;
+        }
+        @media (min-width: 400px) {
+            margin-left: 3.4em;
+        }
+        @media (min-width: 465px) {
+            margin-left: 4em;
+        }
+        @media (min-width: 540px) {
+            width: 14em;
+            margin-left: 4.4em;
+        }
+    }
+
+    &__log-in-button {
+        @include button-style();
+    }
+
+    &__log-in-button:hover {
+        background-color: $green-hover;
+        color: $green-text;
+    }
+
+    &__log-in-button:focus {
+        @include button-shadow($green-shadow);
+    }
+}

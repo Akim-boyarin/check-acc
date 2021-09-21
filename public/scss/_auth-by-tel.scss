@@ -1,0 +1,48 @@
+.authorization-by-tel {
+    font-size: inherit;
+    height: calc(75em/7);
+    padding: calc(10em/7);
+
+    &__form {
+        width: 100%;
+        height: 100%;
+        @include set-flex(column, space-between, flex-start);
+    }
+
+    &__wrapper {
+        font-size: inherit;
+        width: 100%;
+        height: calc(10em/7);
+        @include set-flex(row, flex-start, center);
+    }
+
+    &__wrapper:nth-child(1) {
+        margin-top: calc(5em/14);
+    }
+
+    &__tel-label {
+        display: block;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    &__tel-input {
+        @include input-style();
+        margin-left: 2em;
+        @media (min-width: 540px) {
+            width: 14em;
+        }
+    }
+
+    &__log-in-button {
+        @include button-style();
+    }
+
+    &__log-in-button:hover {
+        background-color: $green-hover;
+        color: $green-text;
+    }
+
+    &__log-in-button:focus {
+        @include button-shadow($green-shadow);
+    }
+}

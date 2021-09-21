@@ -1,0 +1,64 @@
+.success {
+    font-size: inherit;
+    width: 87.5%;
+    @media (min-width: 375px) {
+        width: 80%;
+    }
+    @media (min-width: 465px) {
+        width: 75%;
+    }
+    margin: 0 auto;
+    
+    .content-wrapper {
+        width: 100%;
+        @media (min-width: 570px) {
+            width: 426px;
+        }
+        height: calc(85em/7);
+        border: 1px solid $border-color;
+        border-radius: 0 calc(5em/14) calc(5em/14) calc(5em/14);
+        padding: calc(10em/7);
+        box-shadow: calc(-1em/7) calc(1em/7) calc(2em/7) 0 rgba(89, 107, 116, 0.2);
+        @include set-flex(column, space-between, flex-start);
+    }
+
+    &__body-wrapper {
+        font-size: inherit;
+        width: 100%;
+        @include set-flex(row, flex-start, center);
+        
+    }
+
+    &__pic {
+        width: 45%;
+        width: calc(15em/7);
+        height: calc(15em/7);
+        margin-right: 15px;
+        margin-right: calc(15em/14);
+        background: url("./../img/checked.svg") 50% no-repeat;
+        background-size: 100%;
+        
+    }
+
+    &__message {
+        font-size: calc(10em/7);
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    &__log-out-button-wrapper {
+        width: 100%;
+    }
+
+    &__log-out-button {
+        @include button-style();
+    }
+
+    &__log-out-button:hover {
+        background-color: $green-hover;
+        color: $green-text;
+    }
+
+    &__log-out-button:focus {
+        @include button-shadow($green-shadow);
+    }
+}

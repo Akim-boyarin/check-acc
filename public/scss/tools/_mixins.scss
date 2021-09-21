@@ -1,0 +1,36 @@
+@mixin set-flex($flex-direction, $justify-content, $align-items) {
+    display: flex;
+    flex-direction: $flex-direction;
+    justify-content: $justify-content;
+    align-items: $align-items;
+}
+
+@mixin to-center() {
+    @include set-flex(row, center, center);
+}
+
+@mixin input-style() {
+    font-size: calc(5em/7);
+    display: block;
+    width: 12em;
+    padding: 0.4em 0.5em;
+    border-radius: 0.4em;
+    background-color: $input-background;
+    font-family: 'Open Sans', sans-serif;
+}
+
+@mixin button-style() {
+    font-size: 1em;
+    padding: calc(2em/7) 0.5em;
+    border: 1px solid transparent;
+    border-radius: calc(3em/14);
+    color: $green-text;
+    color: $button-text-color;
+    background-color: $green-base;
+    user-select: none;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+@mixin button-shadow($color) {
+    box-shadow: 0 0 0 0.25em $color;
+}

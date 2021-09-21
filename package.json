@@ -1,0 +1,27 @@
+{
+  "name": "authorization",
+  "version": "1.0.0",
+  "description": "task with making authorization in client-server app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "C:/Users/Akim/Documents/FRONT-END/Test tasks/18.09 - 21.09 Gora studio/.git/"
+  },
+  "keywords": [
+    "authorization",
+    "auth"
+  ],
+  "author": "Akim Boyarinov",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "vue": "^2.6.14"
+  }, 
+  "engines": {
+    "npm": "7.23.0",
+    "node": "v16.9.1"
+  }
+}

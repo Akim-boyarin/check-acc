@@ -1,0 +1,63 @@
+.authorization {
+    font-size: inherit;
+    width: 87.5%;
+    @media (min-width: 375px) {
+        width: 80%;
+    }
+    @media (min-width: 465px) {
+        width: 75%;
+    }
+    margin: 0 auto;
+
+    &__tabs-list {
+        font-size: inherit;
+        width: calc(81em/14);
+        @include set-flex(row, space-between, center);
+    }
+
+    &__tab {
+        width: calc(20em/7);
+        height: calc(10em/7);
+        border-radius: calc(5em/14) calc(5em/14) 0 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    li.authorization__tab:hover {
+        background-color: $tab-background;
+    }
+
+    &__tab:nth-child(1) {
+        background: url("./../img/email-icon.svg") 50% no-repeat;
+        background-size: calc(15em/14);
+    }
+    
+    &__tab:nth-child(2) {
+        background: url("./../img/phone-icon.svg") 50% no-repeat;
+        background-size: calc(13em/14);
+    }
+
+    li.authorization__tabt.authorization__tab--clicked {
+        background-color: $tab-background;
+    }
+
+    &__tabs-content {
+        border: 1px solid $border-color;
+        border-radius: 0 calc(5em/14) calc(5em/14) calc(5em/14);
+        box-shadow: calc(-1em/7) calc(1em/7) calc(2em/7) 0 rgba(89, 107, 116, 0.2);
+        position: relative;
+        @media (min-width: 570px) {
+            width: 426px;
+        }
+
+        .error-message {
+            position: absolute;
+            width: 100%;
+            padding: 5px;
+            background-color: rgb(206, 89, 89);
+            color: #ffffff;
+        }
+    }
+}
+
+

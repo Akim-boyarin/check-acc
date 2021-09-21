@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realizing of authorization</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="app" class="app">
+        <h1 class="app__title">{{ titleText }}</h1>
+
+        <!-- Авторизация -->
+        <div class="app__authorization authorization" v-if="!isAuthCompleted">
+            <!-- Вкладки типов -->
+            <ul class="authorization__tabs-list">
+                <li class="authorization__tab" v-bind:class="emailTab" v-on:click="chooseAuthByEmail"></li>
+                <li class="authorization__tab" v-bind:class="telTab" v-on:click="chooseAuthByTel"></li>
+            </ul>
+            <!-- Контент вкладок -->
+            <div class="authorization__tabs-content">
+                <!-- Сообщение об ошибке -->
+                <div class="error-message" v-bind:class="errorMessage">Authorization failed, please try again.</div>
+
+                <!-- По почте/паролю -->
+                <div class="authorization-by-email" v-if="authByEmail">
+                    <form class="authorization-by-email__form" action="/">
+                        <!-- Почта -->
+                        <div class="authorization-by-email__wrapper">
+                            <label class="authorization-by-email__email-label" for="email-input">Email:</label>
+                            <input class="authorization-by-email__email-input" id="email-input" name="email-input"
+                                type="email" v-model="email">
+                        </div>
+                        <!-- Пароль -->
+                        <div class="authorization-by-email__wrapper">
+                            <label class="authorization-by-email__password-label" for="password-input">Password:</label>
+                            <input class="authorization-by-email__password-input" id="password-input"
+                                name="password-input" type="password" v-model="password">
+                        </div>
+                        <!-- Кнопка -->
+                        <div class="authorization-by-email__wrapper">
+                            <button class="authorization-by-email__log-in-button" type="button" v-on:click="auth">Log in</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- По телефону -->
+                <div class="authorization-by-tel" v-if="!authByEmail">
+                    <div class="authorization-by-tel__form">
+                        <!-- Телефон -->
+                        <div class="authorization-by-tel__wrapper">
+                            <label class="authorization-by-tel__tel-label" for="tel-input">Telephone:</label>
+                            <input class="authorization-by-tel__tel-input" id="tel-input" name="tel-input" type="tel" v-model="tel">
+                        </div>
+                        <!-- Кнопка -->
+                        <div class="authorization-by-tel__wrapper">
+                            <button class="authorization-by-tel__log-in-button" type="button" v-on:click="auth">Log in</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Успех -->
+        <div class="app__success success" v-if="isAuthCompleted">
+            <div class="content-wrapper">
+                <div class="success__body-wrapper">
+                    <div class="success__pic"></div>
+                    <h2 class="success__message">Great!</h2>
+                </div>
+                <div class="success__log-out-button-wrapper">
+                    <button class="success__log-out-button" v-on:click="logOut">Log out</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Vue.js script -->
+    <script type="module">
+        // import { Vue } from "./../node_modules/vue/dist/vue.common.dev.js";
+
+        let app = new Vue({
+            el: "#app",
+            data: {
+                // Переключение между типами авторизации
+                authByEmail: true,
+                emailTab: {
+                    'authorization__tab--clicked': true,
+                },
+                telTab: {
+                    'authorization__tab--clicked': false,
+                },
+
+                // Данные для авторизации
+                email: "",
+                password: "",
+                tel: "",
+
+                // Успешность/неуспешность авторизации
+                errorMessage: {
+                    none: true,
+                },
+
+                // завершение авторизации
+                isAuthCompleted: false,
+
+            },
+            computed: {
+                titleText() {
+                    return (!this.isAuthCompleted) ? "Log in to your account" : "Success";
+                },
+
+            },
+            methods: {
+                chooseAuthByEmail() {
+                    this.authByEmail = true;
+                    this.emailTab['authorization__tab--clicked'] = true;
+                    this.telTab['authorization__tab--clicked'] = false;
+                },
+                chooseAuthByTel() {
+                    this.authByEmail = false;
+                    this.emailTab['authorization__tab--clicked'] = false;
+                    this.telTab['authorization__tab--clicked'] = true;
+                },
+                // Авторизация
+                async auth() {
+                    let data = (this.authByEmail) ? { email: this.email, password: this.password, type: "email", task: "logIn" } : { tel: this.tel, type: "tel", task: "logIn" };
+                    let dataToServer = JSON.stringify(data);
+
+                    let result = await fetch("http://localhost:5000/", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: dataToServer,
+                    }).then(response => response.json());
+                    
+                    if (result.authResult) {
+                        this.isAuthCompleted = true;
+                    } else {
+                        this.errorMessage.none = false;
+                        setTimeout(() => {
+                            this.errorMessage.none = true;
+                        }, 1000);
+                    }
+
+                    this.email = "";
+                    this.password = "";
+                    this.tel = "";
+                },
+                async logOut() {
+                    let data = { task: "logOut" };
+                    let dataToServer = JSON.stringify(data);
+                    console.log(dataToServer);
+
+                    let result = fetch("http://localhost:5000/", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: dataToServer,
+                    }).then(response => response.json());
+
+                    if (result.value) {
+                        this.isAuthCompleted = false;
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

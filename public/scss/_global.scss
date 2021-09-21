@@ -1,0 +1,35 @@
+.app {
+    font-size: 1em;
+    @media (min-width: 375px) {
+        font-size: 15px;
+    }
+    @media (min-width: 440px) {
+        font-size: 16px;
+    }
+    @media (min-width: 510px) {
+        font-size: 17px;
+    }
+    width: 100%;
+    height: 100%;
+    padding-top: calc(10em/7);
+
+    &__title {
+        font-size: 1.2em;
+        width: 87.5%;
+        @media (min-width: 375px) {
+            width: 80%;
+        }
+        @media (min-width: 465px) {
+            width: 75%;
+        }
+        margin: 0 auto;
+        margin-bottom: calc(10em/7);
+        font-family: 'Open sans', sans-serif;
+        font-weight: 500;
+
+    }
+}
+
+div.none {
+    display: none;
+}

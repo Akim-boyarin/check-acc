@@ -1,0 +1,106 @@
+@charset "UTF-8";
+/* обнуляющие стили для браузеров
+
+/* убрать все дефолтные отступы и границы */
+* {
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+/* определить width и height как суммы 
+размеров содержания, padding'ов и border'ов соответственно */
+*, *::before, *::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* убрать линии обводки */
+:focus,
+:active {
+  outline: none;
+}
+
+/* убрать линии обводки у ссылок */
+a:focus,
+a:active {
+  outline: none;
+}
+
+/* сделать данные элементы блочными */
+header,
+main,
+footer,
+nav,
+article,
+section,
+aside,
+details,
+figcaption,
+figure,
+hgroup,
+menu {
+  display: block;
+}
+
+/* уравнять поведение экрана, шрифтов и элементов для разных браузеров; font-size: 100%; -> font-size: 14px; - непонятно  */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  font-size: 14px;
+  /* дефолтный размер шрифта */
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* сделать у форм и кнопок шрифты унаследованными от родителей */
+input, button, textarea {
+  font-family: inherit;
+}
+
+/* убрать кнопку очистки текста в форме в IE */
+input::-ms-clear {
+  display: none;
+}
+
+/* при наведении на кнопку сделать курсор соответствующим ссылке  */
+button {
+  cursor: pointer;
+}
+
+/* убрать показатель внутреннего фокуса у кнопок в Firefox */
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+/* убрать подчёркивание у ссылок, в том числе посещённых */
+a, a:visited {
+  text-decoration: none;
+}
+
+/* убрать подчёркивание у ссылок при наведении */
+a:hover {
+  text-decoration: none;
+}
+
+/* убрать дефолтный стиль списка */
+ul li {
+  list-style: none;
+}
+
+/* сделать картинки выровненными по верху родительского элемента */
+img {
+  vertical-align: top;
+}
+
+/* убрать дефолтные стили заголовков */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: 400;
+}
+/*# sourceMappingURL=nullstyle.css.map */
