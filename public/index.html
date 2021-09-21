@@ -128,7 +128,8 @@
                     let data = (this.authByEmail) ? { email: this.email, password: this.password, type: "email", task: "logIn" } : { tel: this.tel, type: "tel", task: "logIn" };
                     let dataToServer = JSON.stringify(data);
 
-                    let result = await fetch("http://localhost:5000/", {
+                    let port = process.env.PORT || 5000;
+                    let result = await fetch(`http://localhost:${port}/`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'
