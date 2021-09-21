@@ -8,6 +8,14 @@ let jsonParser = express.json();
 
 app.use("/", express.static(`${__dirname}/public`));
 
+app.use("/state", (request, response, next) => {
+    fs.readFile("./dataForAuthorization.json", "utf-8", (error, desiredData) => {
+        let necessaryData = JSON.parse(desiredData);
+        
+        response.json({ state: necessaryData.isLoggedIn });
+    });
+});
+
 app.post("/", jsonParser, (request, response) => {
     fs.readFile("./dataForAuthorization.json", "utf-8", (error, desiredData) => {
         if (request.body.task !== "logIn") return;

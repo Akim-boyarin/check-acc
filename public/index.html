@@ -77,8 +77,8 @@
     </div>
 
     <!-- Vue.js script -->
-    <script type="module">
-        let app = new Vue({
+    <script>
+        let application = new Vue({
             el: "#app",
             data: {
                 // Переключение между типами авторизации
@@ -108,7 +108,6 @@
                 titleText() {
                     return (!this.isAuthCompleted) ? "Log in to your account" : "Success";
                 },
-
             },
             methods: {
                 chooseAuthByEmail() {
@@ -169,6 +168,13 @@
                 }
             }
         });
+
+        async function setClientState() {
+            let result = await fetch("/state").then(response => response.json());
+            application.isAuthCompleted = result.state;
+        }
+
+        setClientState();
     </script>
 </body>
 </html>
