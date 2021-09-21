@@ -137,6 +137,7 @@
                     
                     if (result.authResult) {
                         this.isAuthCompleted = true;
+                        this.chooseAuthByEmail();
                     } else {
                         this.errorMessage.none = false;
                         setTimeout(() => {
