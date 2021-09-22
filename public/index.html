@@ -22,7 +22,7 @@
             <!-- Контент вкладок -->
             <div class="authorization__tabs-content">
                 <!-- Сообщение об ошибке -->
-                <div class="error-message" v-bind:class="errorMessage">Authorization failed, please try again.</div>
+                <div class="error-message" v-bind:class="errorMessageClass">{{ errorMessageText }}</div>
 
                 <!-- По почте/паролю -->
                 <div class="authorization-by-email" v-if="authByEmail">
@@ -51,7 +51,10 @@
                         <!-- Телефон -->
                         <div class="authorization-by-tel__wrapper">
                             <label class="authorization-by-tel__tel-label" for="tel-input">Telephone:</label>
-                            <input class="authorization-by-tel__tel-input" id="tel-input" name="tel-input" type="tel" v-model="tel" pattern="[\+]\d{1}\s[\(]\d{3}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}">
+                            <input 
+                                class="authorization-by-tel__tel-input" id="tel-input" name="tel-input" type="tel" 
+                                v-model="tel" 
+                                v-on:input="setVeiwToTelInput">
                         </div>
                         <!-- Кнопка -->
                         <div class="authorization-by-tel__wrapper">
@@ -96,9 +99,10 @@
                 tel: "",
 
                 // Успешность/неуспешность авторизации
-                errorMessage: {
+                errorMessageClass: {
                     none: true,
                 },
+                errorMessageText: "",
 
                 // завершение авторизации
                 isAuthCompleted: false,
@@ -110,6 +114,7 @@
                 },
             },
             methods: {
+                // Переключение вкладок авторизации
                 chooseAuthByEmail() {
                     this.authByEmail = true;
                     this.emailTab['authorization__tab--clicked'] = true;
@@ -120,38 +125,136 @@
                     this.emailTab['authorization__tab--clicked'] = false;
                     this.telTab['authorization__tab--clicked'] = true;
                 },
+                // Показать сообщение об ошибке
+                showErrorMessage(messageText) {
+                    this.errorMessageText = messageText;
+                    this.errorMessageClass.none = false;
+                    setTimeout(() => {
+                        this.errorMessageText = "";
+                        this.errorMessageClass.none = true;
+                    }, 2000);
+                },
+                // Валидация email
+                emailValidation(email = "gora@studio.ru") {
+                    // Проверка на то, что в него входят только цифры и латинские символы, a также точка и @, а также отстутствует всё остальное
+                    let desireSymbols = ".@0123456789abcdefghijklmnopqrstuvwxyz";
+                    for (let i = 0; i < email.length; i++) {
+                        if (!desireSymbols.includes(email[i])) return false;
+                    }
+
+                    // Проверка на наличие "@"
+                    const DOG_SYMBOL = "@";
+                    if (!email.includes(DOG_SYMBOL)) return false; 
+
+                    // Проверка на наличие только одной точки
+                    let points = email.split("").filter(symbol => symbol === ".");
+                    if (points.length > 1 || !points.length) return false;
+
+                    return true;
+                },
+                // Валидация пароля
+                passwordValidation(password) {
+                    return !!password;
+                },
+                // Валидация телефона
+                // обработка ввода данных
+                setVeiwToTelInput(event) {
+                    let digitsSymbols = "0123456789";
+                    let allNeccessarySymbols = "+0123456789";
+                    
+                    let setView = telValue => {
+                        let dataToView = "";
+                        for (let i = 0; i < telValue.length; i++) {
+                            if (digitsSymbols.includes(telValue[i]) || (telValue[i] === "+" && !telValue.indexOf("+"))) dataToView += telValue[i]
+                        }
+
+                        return dataToView;
+                    };
+
+                    if (event.inputType === 'insertText') {
+                        // только плюс и цифры
+                        if (!allNeccessarySymbols.includes(event.data)) {
+                            let currentTelSymbols = this.tel.split("");
+                            this.tel = currentTelSymbols.filter(symbol => symbol !== event.data).join("");
+                        }
+
+                        // // запретить плюсы не в начале
+                        let currentTelSymbols = this.tel.split("");
+                        this.tel = currentTelSymbols.filter((symbol, index) => !(symbol === "+" && index > 0)).join("");
+                    } else if (event.inputType === 'insertFromPaste' || !(event instanceof InputEvent)) {
+                        this.tel = setView(this.tel);
+                    }
+                },
+                // проверка данных
+                checkTelData(telData) {
+                    // проверка на маску РФ
+                    if (!(telData.slice(0, 2) === "+7" || telData.slice(0, 1) === "8")) return false;
+
+                    // проверка на длину номера
+                    const RUSSIAN_NUMBER_LENGTH = 11;
+                    let dataToCheckLength = (telData.slice(0, 2) === "+7") ? "8" + telData.slice(2) : telData;
+                    if (dataToCheckLength.length !== RUSSIAN_NUMBER_LENGTH) return false;
+
+                    return true;
+                },
+                // преобразовать данные телефона для отпраки на сервер
+                setTelDataToSend(telData = "+79304073847") {
+                    let dataToSend;
+
+                    dataToSend = (telData.slice(0, 1) === "8") ? "+7" + telData.slice(1) : telData;
+                    dataToSend = `${dataToSend.slice(0, 2)} (${dataToSend.slice(2, 5)}) ${dataToSend.slice(5, 8)}-${dataToSend.slice(8, 10)}-${dataToSend.slice(10, 12)}`;
+
+                    return dataToSend;
+                },
                 // Авторизация
                 async auth() {
-                    let data = (this.authByEmail) ? { email: this.email, password: this.password, type: "email", task: "logIn" } : { tel: this.tel, type: "tel", task: "logIn" };
-                    let dataToServer = JSON.stringify(data);
+                    let dataToSend = {};
 
-                    // `http://localhost:5000` - на локальной машине
+                    if (this.authByEmail) {
+                        if (!this.emailValidation(this.email) || !this.passwordValidation(this.password)) {
+                            this.showErrorMessage("These data are not correct. Please try again.");
+                            this.doInputsEmpty();
+                            return;
+                        }
+
+                        dataToSend.type = "email",
+                        dataToSend.email = this.email.toLowerCase();
+                        dataToSend.password = this.password;
+                    } else {
+                        if (!this.checkTelData(this.tel)) {
+                            this.showErrorMessage("This telephone is not correct. Please try again.");
+                            this.doInputsEmpty();
+                            return;
+                        }
+
+                        dataToSend.type = "tel";
+                        dataToSend.tel = this.setTelDataToSend(this.tel);
+                    }
+                    dataToSend.task = "logIn";
+                    
+                    let convertedDataToSend = JSON.stringify(dataToSend);
+
                     let result = await fetch(`/`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'
                         },
-                        body: dataToServer,
+                        body: convertedDataToSend,
                     }).then(response => response.json());
                     
                     if (result.authResult) {
                         this.isAuthCompleted = true;
                         this.chooseAuthByEmail();
                     } else {
-                        this.errorMessage.none = false;
-                        setTimeout(() => {
-                            this.errorMessage.none = true;
-                        }, 2000);
+                        this.showErrorMessage("Authorization is not successed. Please try again.");
                     }
 
-                    this.email = "";
-                    this.password = "";
-                    this.tel = "";
+                    this.doInputsEmpty();
                 },
+                // Разлогинивание
                 async logOut() {
                     let reqBody = JSON.stringify({task: "logOut"});
 
-                    // `http://localhost:5000` - на локальной машине
                     let result = await fetch(`/`, {
                         method: "POST",
                         headers: {
@@ -162,13 +265,21 @@
 
                     if (result.value) {
                         this.isAuthCompleted = false;
-                        this.authByEmail = true;
-                        this.emailTab['authorization__tab--clicked'] = true;
+                        this.chooseAuthByEmail();
                     }
+                    
+
+                },
+                // Установить поля в начальное значение
+                doInputsEmpty() {
+                    this.email = "";
+                    this.password = "";
+                    this.tel = "";
                 }
             }
         });
 
+        // Регулирование состояния приложения от авторизации
         async function setClientState() {
             let result = await fetch("/state").then(response => response.json());
             application.isAuthCompleted = result.state;
