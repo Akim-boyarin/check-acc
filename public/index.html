@@ -137,7 +137,7 @@
                 // Валидация email
                 emailValidation(email = "gora@studio.ru") {
                     // Проверка на то, что в него входят только цифры и латинские символы, a также точка и @, а также отстутствует всё остальное
-                    let desireSymbols = ".@0123456789abcdefghijklmnopqrstuvwxyz";
+                    let desireSymbols = ".@0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     for (let i = 0; i < email.length; i++) {
                         if (!desireSymbols.includes(email[i])) return false;
                     }
